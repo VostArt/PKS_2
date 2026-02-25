@@ -1,0 +1,76 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:models="clr-namespace:LibraryApp.Models"
+        mc:Ignorable="d" d:DesignWidth="900" d:DesignHeight="600"
+        x:Class="LibraryApp.MainWindow"
+        Title="Управление библиотекой (Avalonia UI)"
+        Opened="Window_Opened">
+
+    <Grid RowDefinitions="Auto, *, Auto">
+        
+        <!-- Верхняя панель: Фильтры -->
+        <Border Grid.Row="0" Margin="10" Padding="10" BorderBrush="Gray" BorderThickness="1" CornerRadius="5">
+            <WrapPanel Orientation="Horizontal">
+                <TextBlock Text="Поиск:" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                <TextBox x:Name="SearchBox" Width="200" Margin="0,0,15,0" TextChanged="Filter_Changed"/>
+
+                <TextBlock Text="Автор:" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                <ComboBox x:Name="AuthorFilter" Width="150" Margin="0,0,15,0" SelectionChanged="Filter_Changed">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate x:DataType="models:Author">
+                            <TextBlock Text="{Binding LastName}"/>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+
+                <TextBlock Text="Жанр:" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                <ComboBox x:Name="GenreFilter" Width="150" Margin="0,0,15,0" SelectionChanged="Filter_Changed">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate x:DataType="models:Genre">
+                            <TextBlock Text="{Binding Name}"/>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+
+                <Button Content="Сбросить" Click="Reset_Click"/>
+            </WrapPanel>
+        </Border>
+
+        <!-- Центральная панель: Таблица -->
+        <DataGrid x:Name="BooksGrid" Grid.Row="1" Margin="10" AutoGenerateColumns="False" IsReadOnly="True"
+                  GridLinesVisibility="All" BorderThickness="1" BorderBrush="Gray">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="50"/>
+                <DataGridTextColumn Header="Название" Binding="{Binding Title}" Width="*"/>
+                
+                <!-- ОБНОВЛЕННЫЙ БИНДИНГ ДЛЯ СПИСКОВ -->
+                <!-- В Avalonia в XAML сложно сделать Join, поэтому мы сделаем это в коде или используем конвертер. 
+                     Для простоты оставим пустым или сделаем финт ушами в модели. -->
+                     
+                <!-- Самый простой способ без конвертеров: покажем только первого автора/жанр или ID,
+                     либо можно не выводить, так как это сложный объект. 
+                     
+                     Но лучше всего добавить свойство в Model. -->
+                     
+                <DataGridTextColumn Header="Год" Binding="{Binding PublishYear}" Width="80"/>
+                <DataGridTextColumn Header="ISBN" Binding="{Binding ISBN}" Width="120"/>
+                <DataGridTextColumn Header="Наличие" Binding="{Binding QuantityInStock}" Width="80"/>
+                <DataGridTextColumn Header="Авторы" Binding="{Binding AuthorsDisplay}" Width="150"/>
+                <DataGridTextColumn Header="Жанры" Binding="{Binding GenresDisplay}" Width="150"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <!-- Нижняя панель: Кнопки -->
+<StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="10" Spacing="10">
+    <Button Content="Авторы" Click="ManageAuthors_Click"/>
+    <Button Content="Жанры" Click="ManageGenres_Click"/>
+    
+    <TextBlock Text="|" VerticalAlignment="Center" Margin="5,0"/>
+    <Button Content="Добавить книгу" Click="AddBook_Click" Classes="accent"/>
+    <Button Content="Редактировать" Click="EditBook_Click"/>
+    <Button Content="Удалить" Click="DeleteBook_Click" Background="#FFCCCC"/>
+</StackPanel>
+    </Grid>
+</Window>

@@ -1,0 +1,35 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="LibraryApp.GenreWindow"
+        Title="Управление жанрами" Width="550" Height="450"
+        WindowStartupLocation="CenterOwner"
+        Opened="Window_Opened">
+    
+    <Grid RowDefinitions="*, Auto">
+        <!-- Таблица -->
+        <DataGrid x:Name="GenresGrid" Grid.Row="0" Margin="10" 
+                  AutoGenerateColumns="False" IsReadOnly="True"
+                  GridLinesVisibility="All" BorderThickness="1" BorderBrush="Gray">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="50"/>
+                <DataGridTextColumn Header="Название" Binding="{Binding Name}" Width="150"/>
+                <DataGridTextColumn Header="Описание" Binding="{Binding Description}" Width="*"/>
+            </DataGrid.Columns>
+        </DataGrid>
+        
+        <!-- Панель управления -->
+        <StackPanel Grid.Row="1" Margin="10" Spacing="10">
+            <TextBlock Text="Добавление нового жанра:" FontWeight="Bold"/>
+            <StackPanel Orientation="Horizontal" Spacing="10">
+                <TextBox x:Name="NameBox" Watermark="Название" Width="150"/>
+                <TextBox x:Name="DescBox" Watermark="Описание" Width="200"/>
+                <Button Content="Добавить" Click="AddGenre_Click"/>
+            </StackPanel>
+            
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="10">
+                <Button Content="Удалить выбранный" Click="DeleteGenre_Click" Background="#FFCCCC"/>
+                <Button Content="Закрыть" Click="Close_Click"/>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</Window>

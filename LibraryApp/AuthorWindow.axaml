@@ -1,0 +1,39 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="LibraryApp.AuthorWindow"
+        Title="Управление авторами" Width="600" Height="450"
+        WindowStartupLocation="CenterOwner"
+        Opened="Window_Opened">
+    
+    <Grid RowDefinitions="*, Auto">
+        <!-- Таблица -->
+        <DataGrid x:Name="AuthorsGrid" Grid.Row="0" Margin="10" 
+                  AutoGenerateColumns="False" IsReadOnly="True"
+                  GridLinesVisibility="All" BorderThickness="1" BorderBrush="Gray">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="50"/>
+                <DataGridTextColumn Header="Имя" Binding="{Binding FirstName}" Width="*"/>
+                <DataGridTextColumn Header="Фамилия" Binding="{Binding LastName}" Width="*"/>
+                <DataGridTextColumn Header="Страна" Binding="{Binding Country}" Width="100"/>
+            </DataGrid.Columns>
+        </DataGrid>
+        
+        <!-- Панель управления -->
+        <StackPanel Grid.Row="1" Margin="10" Spacing="10">
+            <TextBlock Text="Добавление нового автора:" FontWeight="Bold"/>
+            
+            <StackPanel Orientation="Horizontal" Spacing="10">
+                <!-- ВАЖНО: Имена (x:Name) должны совпадать с кодом C# -->
+                <TextBox x:Name="FirstNameBox" Watermark="Имя" Width="150"/>
+                <TextBox x:Name="LastNameBox" Watermark="Фамилия" Width="150"/>
+                <TextBox x:Name="CountryBox" Watermark="Страна" Width="100"/>
+                <Button Content="Добавить" Click="AddAuthor_Click"/>
+            </StackPanel>
+            
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="10">
+                <Button Content="Удалить выбранного" Click="DeleteAuthor_Click" Background="#FFCCCC"/>
+                <Button Content="Закрыть" Click="Close_Click"/>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</Window>

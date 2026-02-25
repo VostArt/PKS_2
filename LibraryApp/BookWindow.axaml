@@ -1,0 +1,53 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:models="clr-namespace:LibraryApp.Models"
+        x:Class="LibraryApp.BookWindow"
+        Title="Редактор книги" Width="500" Height="600"
+        WindowStartupLocation="CenterOwner">
+
+    <ScrollViewer>
+        <StackPanel Margin="20" Spacing="10">
+            <TextBlock Text="Название книги:"/>
+            <TextBox x:Name="TitleBox" Text="{Binding Title}"/>
+
+            <!-- МНОЖЕСТВЕННЫЙ ВЫБОР АВТОРОВ -->
+            <TextBlock Text="Авторы (зажмите Ctrl/Cmd для выбора нескольких):"/>
+            <ListBox x:Name="AuthorsList" Height="100" SelectionMode="Multiple,Toggle">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding FullName}"/>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+
+            <!-- МНОЖЕСТВЕННЫЙ ВЫБОР ЖАНРОВ -->
+            <TextBlock Text="Жанры (зажмите Ctrl/Cmd для выбора нескольких):"/>
+            <ListBox x:Name="GenresList" Height="100" SelectionMode="Multiple,Toggle">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Name}"/>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+
+            <Grid ColumnDefinitions="*, 10, *">
+                <StackPanel Grid.Column="0">
+                    <TextBlock Text="Год издания:"/>
+                    <TextBox x:Name="YearBox" Text="{Binding PublishYear}"/>
+                </StackPanel>
+                <StackPanel Grid.Column="2">
+                    <TextBlock Text="Количество:"/>
+                    <TextBox x:Name="StockBox" Text="{Binding QuantityInStock}"/>
+                </StackPanel>
+            </Grid>
+
+            <TextBlock Text="ISBN (только цифры, 10 или 13 знаков):"/>
+            <TextBox x:Name="IsbnBox" Text="{Binding ISBN}"/>
+
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="20" Margin="0,20,0,0">
+                <Button Content="Сохранить" Click="Save_Click" Width="100" HorizontalContentAlignment="Center"/>
+                <Button Content="Отмена" Click="Cancel_Click" Width="100" HorizontalContentAlignment="Center"/>
+            </StackPanel>
+        </StackPanel>
+    </ScrollViewer>
+</Window>
