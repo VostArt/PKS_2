@@ -193,3 +193,4 @@
 /Users/macbook/Documents/Документы — MacBook Air/VSCode/ПКС2/LibraryApp/obj/Debug/net9.0/LibraryApp.dll
 /Users/macbook/Documents/Документы — MacBook Air/VSCode/ПКС2/LibraryApp/obj/Debug/net9.0/LibraryApp.pdb
 /Users/macbook/Documents/Документы — MacBook Air/VSCode/ПКС2/LibraryApp/obj/Debug/net9.0/LibraryApp.genruntimeconfig.cache
+/Users/macbook/Documents/Документы — MacBook Air/VSCode/ПКС2/LibraryApp/obj/Debug/net9.0/LibraryApp.sourcelink.json

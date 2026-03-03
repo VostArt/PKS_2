@@ -1,0 +1,116 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        xmlns:net="clr-namespace:System.Net.NetworkInformation;assembly=System.Net.NetworkInformation"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="600"
+        x:Class="NetAnalyzer.MainWindow"
+        Title="Анализатор сетевых подключений"
+        Width="900" Height="600"
+        Opened="Window_Opened">
+
+    <TabControl Margin="5">
+        
+        <!-- ВКЛАДКА 1: СЕТЕВЫЕ ИНТЕРФЕЙСЫ -->
+        <TabItem Header="Сетевые интерфейсы">
+            <Grid ColumnDefinitions="300, *">
+                <!-- Список интерфейсов слева -->
+                <Border Grid.Column="0" BorderBrush="Gray" BorderThickness="1" Margin="0,0,5,0">
+                    <ListBox x:Name="InterfacesList" SelectionChanged="Interface_SelectionChanged">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel>
+                                    <TextBlock Text="{Binding Name}" FontWeight="Bold"/>
+                                    <TextBlock Text="{Binding Description}" FontSize="10" Foreground="Gray"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </Border>
+
+                <!-- Детали интерфейса справа -->
+                <Border Grid.Column="1" BorderBrush="Gray" BorderThickness="1" Padding="10">
+                    <StackPanel Spacing="10">
+                        <TextBlock Text="Детали интерфейса" FontSize="18" FontWeight="Bold"/>
+                        
+                        <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="150, *">
+                            <TextBlock Grid.Row="0" Grid.Column="0" Text="ID/Имя:" FontWeight="Bold"/>
+                            <TextBlock Grid.Row="0" Grid.Column="1" x:Name="TxtName"/>
+
+                            <TextBlock Grid.Row="1" Grid.Column="0" Text="Тип:" FontWeight="Bold"/>
+                            <TextBlock Grid.Row="1" Grid.Column="1" x:Name="TxtType"/>
+
+                            <TextBlock Grid.Row="2" Grid.Column="0" Text="MAC-адрес:" FontWeight="Bold"/>
+                            <TextBlock Grid.Row="2" Grid.Column="1" x:Name="TxtMac"/>
+
+                            <TextBlock Grid.Row="3" Grid.Column="0" Text="Состояние:" FontWeight="Bold"/>
+                            <TextBlock Grid.Row="3" Grid.Column="1" x:Name="TxtStatus"/>
+
+                            <TextBlock Grid.Row="4" Grid.Column="0" Text="Скорость:" FontWeight="Bold"/>
+                            <TextBlock Grid.Row="4" Grid.Column="1" x:Name="TxtSpeed"/>
+                        </Grid>
+
+                        <Separator Height="2" Background="LightGray"/>
+                        <TextBlock Text="IP Конфигурация (IPv4):" FontWeight="Bold"/>
+                        <TextBlock x:Name="TxtIpInfo" TextWrapping="Wrap"/>
+                    </StackPanel>
+                </Border>
+            </Grid>
+        </TabItem>
+
+        <!-- ВКЛАДКА 2: URL АНАЛИЗАТОР -->
+        <TabItem Header="Анализ URL/URI">
+            <Grid RowDefinitions="Auto, Auto, *" ColumnDefinitions="*, 250">
+                
+                <!-- Поле ввода -->
+                <StackPanel Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal" Spacing="10" Margin="0,0,0,10">
+                    <TextBlock Text="URL:" VerticalAlignment="Center"/>
+                    <TextBox x:Name="UrlInput" Width="400" Watermark="https://google.com/search?q=test"/>
+                    <Button Content="Анализировать" Click="Analyze_Click"/>
+                </StackPanel>
+
+                <!-- Результаты анализа (Слева) -->
+                <Border Grid.Row="1" Grid.Column="0" Grid.RowSpan="2" BorderBrush="Gray" BorderThickness="1" Padding="10" Margin="0,0,5,0">
+                    <ScrollViewer>
+                        <StackPanel Spacing="5">
+                            <TextBlock Text="Компоненты URL" FontSize="16" FontWeight="Bold" Margin="0,0,0,10"/>
+                            
+                            <TextBlock Text="Схема (Протокол):" FontWeight="Bold"/>
+                            <TextBox x:Name="ResScheme" IsReadOnly="True"/>
+
+                            <TextBlock Text="Хост (Домен):" FontWeight="Bold"/>
+                            <TextBox x:Name="ResHost" IsReadOnly="True"/>
+
+                            <TextBlock Text="Порт:" FontWeight="Bold"/>
+                            <TextBox x:Name="ResPort" IsReadOnly="True"/>
+
+                            <TextBlock Text="Путь:" FontWeight="Bold"/>
+                            <TextBox x:Name="ResPath" IsReadOnly="True"/>
+
+                            <TextBlock Text="Параметры (Query):" FontWeight="Bold"/>
+                            <TextBox x:Name="ResQuery" IsReadOnly="True"/>
+
+                            <TextBlock Text="Фрагмент:" FontWeight="Bold"/>
+                            <TextBox x:Name="ResFragment" IsReadOnly="True"/>
+
+                            <Separator Height="10" Background="Transparent"/>
+                            
+                            <TextBlock Text="Сетевая диагностика" FontSize="16" FontWeight="Bold"/>
+                            <Button x:Name="BtnPing" Content="Проверить доступность (Ping) и DNS" Click="PingDns_Click" IsEnabled="False"/>
+                            <TextBlock x:Name="TxtPingResult" TextWrapping="Wrap" Margin="0,5,0,0"/>
+                        </StackPanel>
+                    </ScrollViewer>
+                </Border>
+
+                <!-- История (Справа) -->
+                <Border Grid.Row="1" Grid.RowSpan="2" Grid.Column="1" BorderBrush="Gray" BorderThickness="1">
+                    <DockPanel>
+                        <TextBlock Text="История проверок" DockPanel.Dock="Top" Margin="5" FontWeight="Bold" HorizontalAlignment="Center"/>
+                        <ListBox x:Name="HistoryList" SelectionChanged="History_SelectionChanged"/>
+                    </DockPanel>
+                </Border>
+            </Grid>
+        </TabItem>
+    </TabControl>
+</Window>
