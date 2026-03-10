@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("NetAnalyzer")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c2b00054bb1e38cd2b39b4c487613cc6fa08f326")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+259d61c198b0a5d6a96ba0dbe3154e8c39a1e94e")]
 [assembly: System.Reflection.AssemblyProductAttribute("NetAnalyzer")]
 [assembly: System.Reflection.AssemblyTitleAttribute("NetAnalyzer")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

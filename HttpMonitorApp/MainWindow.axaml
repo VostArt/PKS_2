@@ -1,0 +1,118 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="HttpMonitorApp.MainWindow"
+        Title="HTTP Мониторинг и Сервер" Width="1000" Height="700">
+
+    <TabControl Margin="10">
+        
+        <!-- === ВКЛАДКА 1: СЕРВЕР И МОНИТОРИНГ === -->
+        <TabItem Header="Сервер и Мониторинг">
+            <Grid RowDefinitions="Auto, Auto, *, Auto">
+                
+                <StackPanel Grid.Row="0" Orientation="Horizontal" Spacing="10" Margin="0,0,0,10">
+                    <TextBlock Text="Порт:" VerticalAlignment="Center"/>
+                    <TextBox x:Name="PortInput" Text="8080" Width="80"/>
+                    <Button x:Name="BtnStartServer" Content="Запустить сервер" Click="StartServer_Click" Background="LightGreen"/>
+                    <Button x:Name="BtnStopServer" Content="Остановить" Click="StopServer_Click" IsEnabled="False" Background="#FFCCCC"/>
+                    <TextBlock x:Name="ServerStatusTxt" Text="Статус: Остановлен" VerticalAlignment="Center" FontWeight="Bold" Margin="20,0,0,0"/>
+                </StackPanel>
+
+                <Grid Grid.Row="1" ColumnDefinitions="300, *" Margin="0,0,0,10">
+                    <Border Grid.Column="0" BorderBrush="Gray" BorderThickness="1" Padding="10" Margin="0,0,10,0">
+                        <StackPanel>
+                            <TextBlock Text="Статистика" FontWeight="Bold" FontSize="16" Margin="0,0,0,10"/>
+                            <TextBlock x:Name="StatTotalTxt" Text="Всего запросов: 0"/>
+                            <TextBlock x:Name="StatGetTxt" Text="GET запросов: 0"/>
+                            <TextBlock x:Name="StatPostTxt" Text="POST запросов: 0"/>
+                            <TextBlock x:Name="StatTimeTxt" Text="Ср. время обработки: 0 мс"/>
+                        </StackPanel>
+                    </Border>
+                    
+                    <Border Grid.Column="1" BorderBrush="Gray" BorderThickness="1" Padding="10">
+                        <StackPanel>
+                            <TextBlock Text="График нагрузки (запросы в минуту)" FontWeight="Bold" Margin="0,0,0,10"/>
+                            <ItemsControl x:Name="ChartItems" Height="100">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <StackPanel Orientation="Horizontal" Spacing="2"/>
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Rectangle Width="20" Height="{Binding Height}" Fill="SteelBlue" 
+                                                   VerticalAlignment="Bottom" ToolTip.Tip="{Binding Label}"/>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </StackPanel>
+                    </Border>
+                </Grid>
+
+                <Border Grid.Row="2" BorderBrush="Gray" BorderThickness="1">
+                    <DockPanel>
+                        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Spacing="10" Margin="5" Background="#F0F0F0">
+                            <TextBlock Text="Фильтр метода:" VerticalAlignment="Center"/>
+                            <ComboBox x:Name="FilterMethod" Width="100" SelectionChanged="Filter_Changed">
+                                <ComboBoxItem Content="Все"/>
+                                <ComboBoxItem Content="GET"/>
+                                <ComboBoxItem Content="POST"/>
+                            </ComboBox>
+                            <TextBlock Text="Статус:" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                            <ComboBox x:Name="FilterStatus" Width="100" SelectionChanged="Filter_Changed">
+                                <ComboBoxItem Content="Все"/>
+                                <ComboBoxItem Content="200 OK"/>
+                                <ComboBoxItem Content="Ошибки"/>
+                            </ComboBox>
+                        </StackPanel>
+                        
+                        <DataGrid x:Name="LogsGrid" AutoGenerateColumns="False" IsReadOnly="True" GridLinesVisibility="All">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Время" Binding="{Binding TimestampString}" Width="150"/>
+                                <DataGridTextColumn Header="Метод" Binding="{Binding Method}" Width="70"/>
+                                <DataGridTextColumn Header="URL" Binding="{Binding Url}" Width="250"/>
+                                <DataGridTextColumn Header="Статус" Binding="{Binding StatusCode}" Width="70"/>
+                                <DataGridTextColumn Header="Время (мс)" Binding="{Binding ProcessingTimeMs}" Width="90"/>
+                                <DataGridTextColumn Header="Детали" Binding="{Binding Details}" Width="*"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </DockPanel>
+                </Border>
+                
+                <TextBlock Grid.Row="3" Text="Логи также сохраняются в файл logs.txt в папке приложения" Foreground="Gray" Margin="0,5,0,0"/>
+            </Grid>
+        </TabItem>
+
+        <!-- === ВКЛАДКА 2: HTTP КЛИЕНТ === -->
+        <TabItem Header="HTTP-Клиент">
+            <Grid RowDefinitions="Auto, *, Auto, *">
+                
+                <StackPanel Grid.Row="0" Spacing="10" Margin="0,0,0,10">
+                    <StackPanel Orientation="Horizontal" Spacing="10">
+                        <TextBlock Text="Метод:" VerticalAlignment="Center"/>
+                        <ComboBox x:Name="ClientMethodCombo" Width="100" SelectedIndex="0">
+                            <ComboBoxItem Content="GET"/>
+                            <ComboBoxItem Content="POST"/>
+                        </ComboBox>
+                        <TextBlock Text="URL:" VerticalAlignment="Center"/>
+                        <TextBox x:Name="ClientUrlInput" Width="500" Text="http://localhost:8080/"/>
+                        <Button Content="Отправить запрос" Click="ClientSend_Click" Classes="accent" Background="SteelBlue" Foreground="White"/>
+                    </StackPanel>
+                </StackPanel>
+
+                <!-- ИСПРАВЛЕНО: Убрали сложные кавычки из Text -->
+                <Border Grid.Row="1" BorderBrush="Gray" BorderThickness="1" Margin="0,0,0,10">
+                    <DockPanel>
+                        <TextBlock Text="Тело запроса (JSON) - только для POST:" DockPanel.Dock="Top" Background="#F0F0F0" Padding="5" FontWeight="Bold"/>
+                        <TextBox x:Name="ClientBodyInput" AcceptsReturn="True" TextWrapping="Wrap" 
+                                 Watermark="Введите JSON здесь, например: { &quot;message&quot;: &quot;Привет!&quot; }"/>
+                    </DockPanel>
+                </Border>
+
+                <TextBlock Grid.Row="2" Text="Ответ сервера:" FontWeight="Bold" Margin="0,0,0,5"/>
+                <Border Grid.Row="3" BorderBrush="Gray" BorderThickness="1">
+                    <TextBox x:Name="ClientResponseTxt" AcceptsReturn="True" TextWrapping="Wrap" IsReadOnly="True" Background="#F9F9F9"/>
+                </Border>
+            </Grid>
+        </TabItem>
+    </TabControl>
+</Window>
